@@ -42,11 +42,11 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('-s', '--separator', help='Separator between different pieces of extracted text', type=str,
                         default='\n')
+    parser.add_argument('-j', '--json', help='Also copy the JSON file', action='store_true')
     parser.add_argument('-o', '--overwrite', help='Overwrite if already extracted', action='store_true')
     parser.add_argument('-m', '--min_length', help='Minimum length of text to be not filtered out', type=int,
                         default=25)
-    parser.add_argument('-f', '--filter_out', help='Regex that matches any text to be removed', type=str,
-                        default='')
+    parser.add_argument('-f', '--filter_out', help='Regex that matches any text to be removed', type=str)
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true')
     parser.add_argument('input_dir', type=str, help='Path to directory where html from feeds, with metadata, is saved')
     parser.add_argument('output_dir', type=str,
@@ -61,7 +61,12 @@ if __name__ == '__main__':
         logger.setLevel(logging.INFO)
         logger.info('Verbose output')
 
-    filter_out = re.compile(args.filter_out)
+
+    if args.filter_out:
+        logger.info('Using filter regex: '+args.filter_out)
+        filter_out = re.compile(args.filter_out).match
+    else:
+        filter_out = lambda _: False
 
     for root, dirs, files in os.walk(args.input_dir):
         for file in files:
@@ -84,11 +89,13 @@ if __name__ == '__main__':
                     soup = bs4.BeautifulSoup(html, 'html.parser')
                     all_text = soup.findAll(text=True)
                     extracted_text = args.separator.join([i.strip() for i in filter(visible, all_text) if
-                                                          len(i) > args.min_length and not filter_out.match(i)])
+                                                          len(i) > args.min_length and not filter_out(i)])
                     logger.info('Extracted %d chars from %s (%s)' % (len(extracted_text), filename, encoding))
                     with open(output_file, 'w', errors='ignore') as out:
                         out.write(extracted_text)
-            if file.endswith(JSON_EXT):
+                else:
+                    logger.info('Skipping '+file)
+            if file.endswith(JSON_EXT) and args.json:
                 output_dir = os.path.join(args.output_dir, root[len(args.input_dir) + 1:])
                 output_file = os.path.join(output_dir, file)
                 if not os.path.exists(output_file) or args.overwrite:
