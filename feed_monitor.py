@@ -62,7 +62,11 @@ def download(feeds=None, pause=2, output_path='.'):
             logger.error('Feed error: ' + str(parsed_feed['bozo_exception']))
 
         for entry in parsed_feed.entries:
-            logger.info('Link: ' + entry[ENTRY_LINK])
+            try:
+                logger.info('Link: ' + entry[ENTRY_LINK])
+            except KeyError as ke:
+                logger.error('Link error: ' + str(ke))
+                continue
             filename = hashlib.sha256(entry[ENTRY_LINK].encode()).hexdigest()
             missing = False
             for cat in feed[CATS]:
@@ -88,7 +92,7 @@ def download(feeds=None, pause=2, output_path='.'):
                     fullname = os.sep.join([dirname, filename])
                     with open(fullname + HTML_EXT, 'wb') as out:
                         out.write(html)
-                    with open(fullname + JSON_EXT, 'w') as out:
+                    with open(fullname + JSON_EXT, 'w', encoding='utf-8') as out:
                         json.dump(entry, out)
                     logger.info('Saved to ' + fullname)
                 except IOError as ioe:
@@ -98,8 +102,6 @@ def download(feeds=None, pause=2, output_path='.'):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument('-i', '--interval', help='Time interval in minutes between updates', type=int,
-                        default=30)
     parser.add_argument('-p', '--pause', help='Pause in seconds between URL get requests', type=int, default=2)
     parser.add_argument('-v', '--verbose', help='Verbose output', action='store_true')
     parser.add_argument('output_path', help='Path where to save the downloaded content', type=str)
@@ -115,10 +117,6 @@ if __name__ == '__main__':
         logger.setLevel(logging.INFO)
         logger.info('Verbose output')
 
-    while True:
-        feeds = load_feed_list(args.feeds)
+    feeds = load_feed_list(args.feeds)
 
-        download(feeds, args.pause, args.output_path)
-
-        logger.info('Waiting %d minute until next download' % args.interval)
-        time.sleep(args.interval * 60)
+    download(feeds, args.pause, args.output_path)

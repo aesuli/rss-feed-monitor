@@ -1,10 +1,8 @@
 # Monitor and downloader of RSS feeds
 
-feed_monitor.py is a script to monitor a set of RSS feeds and download the HTML pages they link.
-The main loop of the script consists of loading the list of feeds to be monitored from a CSV file - more on format below - and then proceeding to read the feeds and downloading any HTML page linked in them that has not been already downloaded.
+feed_monitor.py is a script to fetch a set of RSS feeds and download the HTML pages they link.
+The script loads a list of feeds to be monitored from a CSV file - more on format below - and then proceeds reading the feeds and downloading any HTML page linked in them that has not been already downloaded.
 Multiple download of the same linked page is avoided by SHA hashing.
-After all items have been downloaded the scripts goes on stand by for a predefined time, and then repeats the loop.
-Every time the script loops it re-reads the CSV file, thus any modification to that file is effective without the need to stop and restart the script.
 
 ## CSV format
 
@@ -39,7 +37,7 @@ File names are determined by hashing the URL of the page.
 The feed_extractor.py script is a simple script that uses a few hand-made rules to isolate the relevant text of the page from the rest of the content (menus, ads, links, headers and footers).
 The default heuristic is to keep all text that is visible, not part of a link, and that is long at least 25 characters.
 A regex can be specified to further clean the text.
-This is however just an example on how to extract text, each feed may need a dedicated processing to get a nice output.
+This is however just an example on how to extract text, each feed may need a dedicated processing to get a nice output, e.g., using the text_cleaner.py script.
 
 ## DISCLAIMER
 

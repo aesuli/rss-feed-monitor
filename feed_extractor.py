@@ -61,10 +61,9 @@ if __name__ == '__main__':
         logger.setLevel(logging.INFO)
         logger.info('Verbose output')
 
-
     if args.filter_out:
-        logger.info('Using filter regex: '+args.filter_out)
-        filter_out = re.compile(args.filter_out).match
+        logger.info('Using filter regex: ' + args.filter_out)
+        filter_out = re.compile(args.filter_out).search
     else:
         filter_out = lambda _: False
 
@@ -91,10 +90,10 @@ if __name__ == '__main__':
                     extracted_text = args.separator.join([i.strip() for i in filter(visible, all_text) if
                                                           len(i) > args.min_length and not filter_out(i)])
                     logger.info('Extracted %d chars from %s (%s)' % (len(extracted_text), filename, encoding))
-                    with open(output_file, 'w', errors='ignore') as out:
+                    with open(output_file, 'w', encoding='utf-8', errors='ignore') as out:
                         out.write(extracted_text)
                 else:
-                    logger.info('Skipping '+file)
+                    logger.info('Skipping ' + file)
             if file.endswith(JSON_EXT) and args.json:
                 output_dir = os.path.join(args.output_dir, root[len(args.input_dir) + 1:])
                 output_file = os.path.join(output_dir, file)
