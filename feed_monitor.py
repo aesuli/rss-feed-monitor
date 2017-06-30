@@ -39,7 +39,7 @@ JSON_EXT = '.json'
 def load_feed_list(filenames):
     feeds = []
     for filename in filenames:
-        with open(filename, 'r') as file:
+        with open(filename, 'r', encoding='utf-8') as file:
             csvreader = csv.reader(file)
             for row in csvreader:
                 if len(row) > 2:
