@@ -51,6 +51,7 @@ def load_feed_list(filenames):
 
 
 def download(feeds=None, pause=2, output_path='.'):
+    count = 0
     logger = logging.getLogger('sys.argv[0]')
     if feeds is None:
         feeds = []
@@ -83,6 +84,8 @@ def download(feeds=None, pause=2, output_path='.'):
             except requests.RequestException as re:
                 logger.error('Link error: ' + str(re))
                 continue
+
+            count += 1
             html = resp.content
 
             for cat in feed[CATS]:
@@ -98,6 +101,7 @@ def download(feeds=None, pause=2, output_path='.'):
                 except IOError as ioe:
                     logger.error('Save error: ' + str(ioe))
             time.sleep(pause)
+    return count
 
 
 if __name__ == '__main__':
@@ -119,4 +123,5 @@ if __name__ == '__main__':
 
     feeds = load_feed_list(args.feeds)
 
-    download(feeds, args.pause, args.output_path)
+    count = download(feeds, args.pause, args.output_path)
+    logger.info('%d pages downloaded.' % count)

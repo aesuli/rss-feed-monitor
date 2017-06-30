@@ -70,7 +70,7 @@ if __name__ == '__main__':
     for root, dirs, files in os.walk(args.input_dir):
         for file in files:
             if file.endswith(HTML_EXT):
-                output_dir = os.path.join(args.output_dir, root[len(args.input_dir) + 1:])
+                output_dir = os.path.join(args.output_dir, root[len(args.input_dir):])
                 output_file = os.path.join(output_dir, file[:-len(HTML_EXT)] + TEXT_EXT)
                 if not os.path.exists(output_file) or args.overwrite:
                     os.makedirs(output_dir, exist_ok=True)
