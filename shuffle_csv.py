@@ -22,3 +22,4 @@ if __name__ == '__main__':
         writer = csv.writer(outputfile)
         for _, row in data:
             writer.writerow(row)
+    print('Processed '+ len(data) + ' rows.')

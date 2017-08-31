@@ -51,4 +51,4 @@ if __name__ == '__main__':
             for id, text, label in data_generator:
                 csvout.writerow([id, text, schema_name + LABEL_SEPARATOR + label])
                 count += 1
-    logger.info('Processed '+ str(count) + ' file.')
+    logger.info('Processed '+ str(count) + ' files.')
