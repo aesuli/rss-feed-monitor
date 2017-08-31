@@ -18,7 +18,7 @@ if __name__ == '__main__':
         reader = csv.reader(inputfile)
         data = [(random.random(), row) for row in reader]
     data.sort()
-    with open(args.input, mode='w', encoding='utf-8') as outputfile:
+    with open(args.ouutput, mode='w', encoding='utf-8') as outputfile:
         writer = csv.writer(outputfile)
         for _, row in data:
             writer.writerow(row)
