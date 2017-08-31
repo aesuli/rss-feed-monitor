@@ -18,9 +18,9 @@ if __name__ == '__main__':
                         help='Path to directory where the extracted text, with metadata, will be saved')
     parser.add_argument('filter_file', type=str,
                         help='File with regular expressions to filter out text when a match is found. One regex per line.')
-    args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args()
 
-    logger = logging.getLogger('sys.argv[0]')
+    logger = logging.getLogger(sys.argv[0])
     ch = logging.StreamHandler()
     logger.addHandler(ch)
 

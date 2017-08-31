@@ -52,7 +52,7 @@ def load_feed_list(filenames):
 
 def download(feeds=None, pause=2, output_path='.'):
     count = 0
-    logger = logging.getLogger('sys.argv[0]')
+    logger = logging.getLogger(sys.argv[0])
     if feeds is None:
         feeds = []
 
@@ -111,9 +111,9 @@ if __name__ == '__main__':
     parser.add_argument('output_path', help='Path where to save the downloaded content', type=str)
     parser.add_argument('feeds', help='CSV file listing URLs of RSS feeds and the assigned categories', type=str,
                         nargs='+')
-    args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args()
 
-    logger = logging.getLogger('sys.argv[0]')
+    logger = logging.getLogger(sys.argv[0])
     ch = logging.StreamHandler()
     logger.addHandler(ch)
 

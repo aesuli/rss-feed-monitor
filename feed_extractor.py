@@ -51,9 +51,9 @@ if __name__ == '__main__':
     parser.add_argument('input_dir', type=str, help='Path to directory where html from feeds, with metadata, is saved')
     parser.add_argument('output_dir', type=str,
                         help='Path to directory where the extracted text, with metadata, will be saved')
-    args = parser.parse_args(sys.argv[1:])
+    args = parser.parse_args()
 
-    logger = logging.getLogger('sys.argv[0]')
+    logger = logging.getLogger(sys.argv[0])
     ch = logging.StreamHandler()
     logger.addHandler(ch)
 
