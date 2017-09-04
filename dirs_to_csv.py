@@ -1,11 +1,11 @@
 import argparse
 import csv
 import logging
-
+import re
 import os
-
 import sys
 
+BLANK_SUB = '_'
 LABEL_SEPARATOR = ':'
 ID_SEPARATOR = '_'
 
@@ -49,6 +49,7 @@ if __name__ == '__main__':
         for directory in args.directory:
             data_generator = read_data(directory)
             for id, text, label in data_generator:
-                csvout.writerow([id, text, schema_name + LABEL_SEPARATOR + label])
+                no_space_label = re.sub('\s', BLANK_SUB, schema_name + LABEL_SEPARATOR + label)
+                csvout.writerow([id, text, no_space_label])
                 count += 1
     logger.info('Processed '+ str(count) + ' files.')
